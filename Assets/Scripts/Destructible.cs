@@ -1,3 +1,4 @@
+using System.Data;
 using UnityEngine;
 
 public class Destructible : MonoBehaviour
@@ -18,6 +19,10 @@ public class Destructible : MonoBehaviour
         {
             int randomIndex = Random.Range(0, spawnableItems.Length);
             Instantiate(spawnableItems[randomIndex], transform.position, Quaternion.identity);
+
+            Vector2Int cell = new Vector2Int(Mathf.FloorToInt(transform.position.x), Mathf.FloorToInt(transform.position.y));
+            MapManager.Instance.SetCell(cell, CellType.Item);
+            GameManager.AddCoins(spawnableItems[randomIndex]);
         }
     }
 

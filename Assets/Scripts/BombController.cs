@@ -4,6 +4,9 @@ using UnityEngine.Tilemaps;
 
 public class BombController : MonoBehaviour
 {
+
+    private string agentName;
+
     [Header("Bomb")]
     public KeyCode inputKey = KeyCode.LeftShift;
     public GameObject bombPrefab;
@@ -20,10 +23,10 @@ public class BombController : MonoBehaviour
     [Header("Destructible")]
     public Tilemap destructibleTiles;
     public Destructible destructiblePrefab;
-
     private void OnEnable()
     {
         bombsRemaining = bombAmount;
+        agentName = gameObject.name;
     }
 
     private void Update()
@@ -41,13 +44,28 @@ public class BombController : MonoBehaviour
         position.y = Mathf.Floor(position.y) + 0.5f;
 
         GameObject bomb = Instantiate(bombPrefab, position, Quaternion.identity);
+        GameManager.AddBombs(agentName, bomb);
+
+        Bomb bombComponent = bomb.GetComponent<Bomb>();
+
+        if (bombComponent == null)
+        {
+            bombComponent = bomb.AddComponent<Bomb>();
+            bombComponent.fuseTime = bombFuseTime;
+            bombComponent.SetExplosionRadius(explosionRadius); // Can random
+        }
         bombsRemaining--;
+        // Set Bomb Cell in MapGrid
+        Vector2Int cell = new Vector2Int(Mathf.FloorToInt(position.x), Mathf.FloorToInt(position.y));
+        MapManager.Instance.SetCell(cell, CellType.Bomb);
 
         yield return new WaitForSeconds(bombFuseTime);
 
         position = bomb.transform.position;
         position.x = Mathf.Floor(position.x) + 0.5f;
         position.y = Mathf.Floor(position.y) + 0.5f;
+        // Set Empty Cell in MapGrid when exploding
+        MapManager.Instance.SetCell(cell, CellType.Empty);
 
         Explosion explosion = Instantiate(explosionPrefab, position, Quaternion.identity);
         explosion.SetActiveRenderer(explosion.start);
@@ -59,6 +77,8 @@ public class BombController : MonoBehaviour
         Explode(position, Vector2.right, explosionRadius);
 
         Destroy(bomb);
+        GameManager.RemoveBomb(agentName, bomb);
+
         bombsRemaining++;
     }
 
@@ -71,6 +91,12 @@ public class BombController : MonoBehaviour
 
         position += direction;
 
+        // Compute position of this cell
+        Vector2Int cell = new Vector2Int(
+            Mathf.FloorToInt(position.x),
+            Mathf.FloorToInt(position.y)
+        );
+
         if (Physics2D.OverlapBox(position, Vector2.one / 2f, 0f, explosionLayerMask))
         {
             ClearDestructible(position);
@@ -82,7 +108,20 @@ public class BombController : MonoBehaviour
         explosion.SetDirection(direction);
         explosion.DestroyAfter(explosionDuration);
 
+        // Set Explosion Cell and clear after delay
+        MapManager.Instance.SetCell(cell, CellType.Explosion);
+        StartCoroutine(ClearExplosionAfterDelay(cell, explosionDuration));
+
         Explode(position, direction, length - 1);
+    }
+    private IEnumerator ClearExplosionAfterDelay(Vector2Int cell, float delay)
+    {
+        yield return new WaitForSeconds(delay);
+
+        if (MapManager.Instance.GetCell(cell) == CellType.Explosion)
+        {
+            MapManager.Instance.SetCell(cell, CellType.Empty);
+        }
     }
 
     private void ClearDestructible(Vector2 position)
@@ -94,6 +133,8 @@ public class BombController : MonoBehaviour
         {
             Instantiate(destructiblePrefab, position, Quaternion.identity);
             destructibleTiles.SetTile(cell, null);
+            Vector2Int block = new Vector2Int(cell.x, cell.y);
+            MapManager.Instance.SetCell(block, CellType.Empty);
         }
     }
 
@@ -111,4 +152,16 @@ public class BombController : MonoBehaviour
         }
     }
 
+    public int getBombRemaining()
+    {
+        return this.bombsRemaining;
+    }
+
+    public void PlaceBombManually()
+    {
+        if (bombsRemaining > 0)
+        {
+            StartCoroutine(PlaceBomb());
+        }
+    }
 }

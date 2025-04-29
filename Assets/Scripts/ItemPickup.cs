@@ -29,6 +29,8 @@ public class ItemPickup : MonoBehaviour
         }
 
         Destroy(gameObject);
+        GameManager.RemoveCoin(gameObject);
+
     }
 
     private void OnTriggerEnter2D(Collider2D other)

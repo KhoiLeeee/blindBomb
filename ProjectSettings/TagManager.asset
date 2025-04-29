@@ -3,7 +3,11 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 3
-  tags: []
+  tags:
+  - Indestructible
+  - Destructible
+  - Empty
+  - Enemy
   layers:
   - Default
   - TransparentFX
@@ -15,8 +19,8 @@ TagManager:
   - Player
   - Explosion
   - Item
-  - 
-  - 
+  - Indestructible
+  - Destructible
   - 
   - 
   - 
