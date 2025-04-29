@@ -120,16 +120,16 @@ public class MovementController : MonoBehaviour
             Mathf.FloorToInt(newPosition.x),
             Mathf.FloorToInt(newPosition.y)
         );
-        if (newCell != startCell)
-        {
-            if (MapManager.Instance.GetCell(startCell) != CellType.Bomb)
-            {
-                MapManager.Instance.SetCell(startCell, CellType.Empty);
-            }
+        //if (newCell != startCell)
+        //{
+        //    if (MapManager.Instance.GetCell(startCell) != CellType.Bomb)
+        //    {
+        //        MapManager.Instance.SetCell(startCell, CellType.Empty);
+        //    }
             
-            MapManager.Instance.SetCell(newCell, CellType.Player);
-            startCell = newCell;
-        }
+        //    MapManager.Instance.SetCell(newCell, CellType.Player);
+        //    startCell = newCell;
+        //}
         rb.MovePosition(newPosition);
         //if (isMoving)
         //{

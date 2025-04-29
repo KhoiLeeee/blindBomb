@@ -21,8 +21,8 @@ public class Destructible : MonoBehaviour
             Instantiate(spawnableItems[randomIndex], transform.position, Quaternion.identity);
 
             Vector2Int cell = new Vector2Int(Mathf.FloorToInt(transform.position.x), Mathf.FloorToInt(transform.position.y));
-            MapManager.Instance.SetCell(cell, CellType.Item);
-            GameManager.AddCoins(spawnableItems[randomIndex]);
+            //MapManager.Instance.SetCell(cell, CellType.Item);
+            //GameManager.AddCoins(spawnableItems[randomIndex]);
         }
     }
 
