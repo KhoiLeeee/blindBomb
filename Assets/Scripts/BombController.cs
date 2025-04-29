@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
@@ -22,7 +23,15 @@ public class BombController : MonoBehaviour
 
     [Header("Destructible")]
     public Tilemap destructibleTiles;
-    public Destructible destructiblePrefab;
+
+    [System.Serializable]
+    public class DestructibleMapping
+    {
+        public TileBase tile;
+        public Destructible prefab;
+    }
+    public List<DestructibleMapping> destructibleMappings;
+
     private void OnEnable()
     {
         bombsRemaining = bombAmount;
@@ -105,7 +114,7 @@ public class BombController : MonoBehaviour
 
         Explosion explosion = Instantiate(explosionPrefab, position, Quaternion.identity);
         explosion.SetActiveRenderer(length > 1 ? explosion.middle : explosion.end);
-        explosion.SetDirection(direction);
+        // explosion.SetDirection(direction);
         explosion.DestroyAfter(explosionDuration);
 
         // Set Explosion Cell and clear after delay
@@ -131,10 +140,17 @@ public class BombController : MonoBehaviour
 
         if (tile != null)
         {
-            Instantiate(destructiblePrefab, position, Quaternion.identity);
-            destructibleTiles.SetTile(cell, null);
-            Vector2Int block = new Vector2Int(cell.x, cell.y);
-            MapManager.Instance.SetCell(block, CellType.Empty);
+            foreach (DestructibleMapping mapping in destructibleMappings)
+            {
+                if (mapping.tile == tile)
+                {
+                    Instantiate(mapping.prefab, position, Quaternion.identity);
+                    destructibleTiles.SetTile(cell, null);
+                    Vector2Int block = new Vector2Int(cell.x, cell.y);
+                    MapManager.Instance.SetCell(block, CellType.Empty);
+                    break;
+                }
+            }
         }
     }
 
