@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.Tilemaps;
 
 public class Manager : MonoBehaviour
@@ -16,6 +17,10 @@ public class Manager : MonoBehaviour
 
     private List<GameObject> teamA = new List<GameObject>();
     private List<GameObject> teamB = new List<GameObject>();
+
+    public GameObject pauseGameScreen;
+    public GameObject continueButton;
+    public GameObject backToMenuButton;
 
     public Tilemap destructibleTiles;
     public Tilemap indestructibleTiles;
@@ -183,4 +188,20 @@ public class Manager : MonoBehaviour
         }
     }
     void LoadFixedMap() { /* your logic here */ }
+
+    public void onPauseButtonClicked()
+    {
+        pauseGameScreen.SetActive(true);
+        Time.timeScale = 0f;
+    }
+    public void onContinueButtonClicked()
+    {
+        Time.timeScale = 1f;
+        pauseGameScreen.SetActive(false);
+    }
+    
+    public void onMenuButtonClicked()
+    {
+        SceneManager.LoadScene("mainMenu");
+    }
 }
