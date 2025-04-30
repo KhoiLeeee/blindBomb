@@ -20,9 +20,9 @@ public class Manager : MonoBehaviour
     public Tilemap destructibleTiles;
     public Tilemap indestructibleTiles;
 
-    public GameObject barrelPrefab;
-    public GameObject boxPrefab;
-    public GameObject signPrefab;
+    public Tile barrelTile;
+    public Tile boxTile;
+    public Tile signTile;
 
     public int barrelCount = 10;
     public int boxCount = 10;
@@ -162,7 +162,6 @@ public class Manager : MonoBehaviour
     void GenerateRandomMap()
     {
         List<Vector3Int> positions = GetAvailablePositions();
-        Debug.Log("Available positions: " + positions.Count);
         System.Random rng = new System.Random();
         positions = positions.OrderBy(x => rng.Next()).ToList(); // shuffle
 
@@ -172,15 +171,14 @@ public class Manager : MonoBehaviour
         for (int i = 0; i < total && i < positions.Count; i++)
         {
             Vector3Int cell = positions[i];
-            Vector3 worldPos = destructibleTiles.CellToWorld(cell) + new Vector3(0.5f, 0.5f, 0);
 
-            GameObject prefabToPlace = null;
+            Tile tileToPlace = null;
 
-            if (placed < barrelCount) prefabToPlace = barrelPrefab;
-            else if (placed < barrelCount + boxCount) prefabToPlace = boxPrefab;
-            else prefabToPlace = signPrefab;
-            Debug.Log($"Spawning {prefabToPlace.name} at {worldPos}");
-            Instantiate(prefabToPlace, worldPos, Quaternion.identity);
+            if (placed < barrelCount) tileToPlace = barrelTile;
+            else if (placed < barrelCount + boxCount) tileToPlace = boxTile;
+            else tileToPlace = signTile;
+
+            destructibleTiles.SetTile(cell, tileToPlace);
             placed++;
         }
     }
