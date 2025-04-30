@@ -1,9 +1,15 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using System.Collections;
+using UnityEngine.Video;
 
 
 public class MenuManager : MonoBehaviour
 {
+    public VideoPlayer videoPlayer;
+    public AudioSource musicSource;
+    public GameObject canva;
+
     public GameObject playButton;
     public GameObject settingsButton;
     public GameObject quitButton;
@@ -29,6 +35,24 @@ public class MenuManager : MonoBehaviour
 
     public void OnStartClicked()
     {
+        DontDestroyOnLoad(musicSource.gameObject);
+        musicSource.Play();
+        videoPlayer.Prepare();
+        videoPlayer.loopPointReached += OnVideoEnd;
+        StartCoroutine(PlayWhenReady());
+    }
+    private IEnumerator PlayWhenReady()
+    {
+        while (!videoPlayer.isPrepared)
+            yield return null;
+
+        canva.SetActive(false);
+        videoPlayer.Play();
+    }
+
+    private void OnVideoEnd(VideoPlayer vp)
+    {
+        vp.loopPointReached -= OnVideoEnd;
         SceneManager.LoadScene("blindBomb");
     }
 
