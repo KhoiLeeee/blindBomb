@@ -1,59 +1,49 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
+using System;
 
 public class KeyRebindingManager : MonoBehaviour
 {
+    public static KeyRebindingManager Instance { get; private set; }
+
     [Header("UI References")]
     public GameObject popupPanel;
-    public Button[] keyButtons;
-    public Text currentKeyText;
+    public Transform gridParent;
+    public TMP_Text currentKeyText;
+    public GameObject keyButtonPrefab;
 
     [Header("Internal State")]
-    private string currentSymbol;
-    private Dictionary<string, KeyCode> symbolToKey;
-    private Dictionary<KeyCode, string> keyToSymbol;
-    private HashSet<KeyCode> unavailableKeys = new HashSet<KeyCode>();
-
+    private string currentPlayer;
+    private string actionName;
+    private Dictionary<KeyCode, Button> keyButtons = new Dictionary<KeyCode, Button>();
     private void Awake()
     {
-        InitializeKeyMappings();
-    }
-
-    private void InitializeKeyMappings()
-    {
-        symbolToKey = new Dictionary<string, KeyCode>
+        if (Instance != null && Instance != this)
         {
-            { "W", KeyCode.W },
-            { "A", KeyCode.A },
-            { "S", KeyCode.S },
-            { "D", KeyCode.D },
-            { "←", KeyCode.LeftArrow },
-            { "→", KeyCode.RightArrow },
-            { "↑", KeyCode.UpArrow },
-            { "↓", KeyCode.DownArrow },
-            { "Enter", KeyCode.Return },
-            { "Space", KeyCode.Space }
-        };
+            Destroy(gameObject);
+            return;
+        }
+        Instance = this;
 
-        keyToSymbol = new Dictionary<KeyCode, string>();
-        foreach (var pair in symbolToKey)
-            keyToSymbol[pair.Value] = pair.Key;
+        CreateKeyButtons();
     }
-    public void OpenPopup(string currentKeySymbol)
+    public void OpenPopup(string _player, string _actionName, KeyCode currentKey, TMP_Text keyTextLabel)
     {
         popupPanel.SetActive(true);
-        currentSymbol = currentKeySymbol;
 
-        KeyCode currentKey = symbolToKey.ContainsKey(currentKeySymbol)
-            ? symbolToKey[currentKeySymbol]
-            : KeyCode.None;
+        currentPlayer = _player;
+        actionName = _actionName;
+        currentKeyText = keyTextLabel;
 
-        foreach (Button button in keyButtons)
+        HashSet<KeyCode> unavailable = KeyBindingRegistry.GetUnavailableKeys(currentPlayer);
+
+        foreach (var pair in keyButtons)
         {
-            Text btnText = button.GetComponentInChildren<Text>();
-            string btnSymbol = btnText.text;
-            KeyCode btnKey = symbolToKey.ContainsKey(btnSymbol) ? symbolToKey[btnSymbol] : KeyCode.None;
+            KeyCode btnKey = pair.Key;
+            Button button = pair.Value;
+            TMP_Text btnText = button.GetComponentInChildren<TMP_Text>();
 
             ColorBlock colors = button.colors;
             if (btnKey == currentKey)
@@ -61,7 +51,7 @@ public class KeyRebindingManager : MonoBehaviour
                 colors.normalColor = Color.green;
                 button.interactable = true;
             }
-            else if (unavailableKeys.Contains(btnKey))
+            else if (unavailable.Contains(btnKey))
             {
                 colors.normalColor = Color.gray;
                 button.interactable = false;
@@ -74,31 +64,52 @@ public class KeyRebindingManager : MonoBehaviour
 
             button.colors = colors;
             button.onClick.RemoveAllListeners();
-            button.onClick.AddListener(() => OnKeySelected(btnSymbol)); 
+            button.onClick.AddListener(() => OnKeySelected(btnKey)); 
         }
     }
 
-    public void OnKeySelected(string selectedSymbol)
+    public void OnKeySelected(KeyCode selectedKey)
     {
-        if (!symbolToKey.ContainsKey(selectedSymbol))
-        {
-            Debug.LogWarning("Unknown symbol selected: " + selectedSymbol);
-            return;
-        }
-
-        KeyCode selectedKey = symbolToKey[selectedSymbol];
-        KeyCode previousKey = symbolToKey[currentSymbol];
-
-        unavailableKeys.Remove(previousKey);
-        unavailableKeys.Add(selectedKey);
-
-        currentKeyText.text = selectedSymbol;
-
+        KeyBindingRegistry.UpdateKey(currentPlayer, actionName, selectedKey);
+        currentKeyText.text = KeyCodeToSymbol(selectedKey);
         popupPanel.SetActive(false);
     }
 
     public void ClosePopup()
     {
         popupPanel.SetActive(false);
+    }
+
+    private void CreateKeyButtons()
+    {
+        KeyCode[] allKeys = (KeyCode[])Enum.GetValues(typeof(KeyCode));
+        HashSet<KeyCode> used = new HashSet<KeyCode>();
+
+        foreach (KeyCode key in allKeys)
+        {
+            if ((int)key < (int)KeyCode.Space || used.Contains(key)) continue;
+
+            used.Add(key);
+
+            GameObject btnObj = Instantiate(keyButtonPrefab, gridParent);
+            TMP_Text label = btnObj.GetComponentInChildren<TMP_Text>();
+            label.text = KeyCodeToSymbol(key);
+
+            Button btn = btnObj.GetComponent<Button>();
+            keyButtons[key] = btn;
+        }
+    }
+    private string KeyCodeToSymbol(KeyCode key)
+    {
+        switch (key)
+        {
+            case KeyCode.LeftArrow: return "←";
+            case KeyCode.RightArrow: return "→";
+            case KeyCode.UpArrow: return "↑";
+            case KeyCode.DownArrow: return "↓";
+            case KeyCode.Return: return "Enter";
+            case KeyCode.Space: return "Space";
+            default: return key.ToString().ToUpper();
+        }
     }
 }

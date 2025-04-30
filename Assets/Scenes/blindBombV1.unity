@@ -2914,7 +2914,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &935890506
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5300,7 +5300,6 @@ GameObject:
   - component: {fileID: 1818614535}
   - component: {fileID: 1818614534}
   - component: {fileID: 1818614533}
-  - component: {fileID: 1818614532}
   - component: {fileID: 1818614531}
   - component: {fileID: 1818614536}
   m_Layer: 7
@@ -5340,28 +5339,6 @@ MonoBehaviour:
     prefab: {fileID: 1450330047253541039, guid: 1608ac0b7fa328448b2945c25f7b5007, type: 3}
   - tile: {fileID: 11400000, guid: dfa3b9ce1d0fe5a459bd4deab5ca341c, type: 2}
     prefab: {fileID: 7500351429294223165, guid: 44dcd1e54685543498d18a0ca0f03b72, type: 3}
---- !u!114 &1818614532
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1818614530}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: acd0bc49a47044b4a97fa2a38eaed40c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  speed: 5
-  inputUp: 119
-  inputDown: 115
-  inputLeft: 97
-  inputRight: 100
-  spriteRendererUp: {fileID: 1171135760}
-  spriteRendererDown: {fileID: 2063920510}
-  spriteRendererLeft: {fileID: 972790924}
-  spriteRendererRight: {fileID: 2071729277}
-  spriteRendererDeath: {fileID: 1491911450}
 --- !u!58 &1818614533
 CircleCollider2D:
   m_ObjectHideFlags: 0
