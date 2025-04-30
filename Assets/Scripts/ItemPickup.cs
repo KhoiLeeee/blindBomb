@@ -1,3 +1,6 @@
+using NUnit.Framework;
+using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class ItemPickup : MonoBehaviour
@@ -27,15 +30,13 @@ public class ItemPickup : MonoBehaviour
                 player.GetComponent<MovementController>().speed++;
                 break;
         }
-
-        Destroy(gameObject);
         GameManager.RemoveCoin(gameObject);
-
+        Destroy(gameObject);
     }
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        if (other.CompareTag("Player"))
+        if (other.CompareTag("Player") || other.CompareTag("Enemy"))
         {
             OnItemPickup(other.gameObject);
         }

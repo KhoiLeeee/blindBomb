@@ -618,9 +618,10 @@ GameObject:
   - component: {fileID: 422760913}
   - component: {fileID: 422760912}
   - component: {fileID: 422760911}
+  - component: {fileID: 422760916}
   m_Layer: 7
-  m_Name: Player 4
-  m_TagString: Player
+  m_Name: Enemy 3
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -637,15 +638,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9d06995ecd10e884ea6fb063acae5132, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  inputKey: 98
+  inputKey: 282
   bombPrefab: {fileID: 1491869729406208120, guid: 6ae993a1c81fcaf409e8bfbca1456ab2, type: 3}
-  bombFuseTime: 2
+  bombFuseTime: 3
   bombAmount: 1
   explosionPrefab: {fileID: 2227773624119384591, guid: 18b586179fd374f49aeec48874f3f180, type: 3}
   explosionLayerMask:
     serializedVersion: 2
     m_Bits: 64
-  explosionDuration: 1
+  explosionDuration: 0.5
   explosionRadius: 1
   destructibleTiles: {fileID: 1998781636}
   destructibleMappings:
@@ -662,7 +663,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 422760910}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: acd0bc49a47044b4a97fa2a38eaed40c, type: 3}
   m_Name: 
@@ -760,6 +761,30 @@ Transform:
   - {fileID: 229988704}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &422760916
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 422760910}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: faaf2ddc577f48549a365aaef63c6a51, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  speed: 10
+  level: 1
+  waitTime: 0.5
+  inputUp: 119
+  inputDown: 115
+  inputLeft: 97
+  inputRight: 100
+  spriteRendererUp: {fileID: 2119664203}
+  spriteRendererDown: {fileID: 1502566296}
+  spriteRendererLeft: {fileID: 1446793280}
+  spriteRendererRight: {fileID: 748148469}
+  spriteRendererDeath: {fileID: 229988702}
 --- !u!1 &447133308
 GameObject:
   m_ObjectHideFlags: 0
@@ -773,9 +798,10 @@ GameObject:
   - component: {fileID: 447133311}
   - component: {fileID: 447133310}
   - component: {fileID: 447133309}
+  - component: {fileID: 447133314}
   m_Layer: 7
-  m_Name: Player 2
-  m_TagString: Player
+  m_Name: Enemy 2
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -792,15 +818,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9d06995ecd10e884ea6fb063acae5132, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  inputKey: 98
+  inputKey: 282
   bombPrefab: {fileID: 1491869729406208120, guid: 6ae993a1c81fcaf409e8bfbca1456ab2, type: 3}
-  bombFuseTime: 2
+  bombFuseTime: 3
   bombAmount: 1
   explosionPrefab: {fileID: 2227773624119384591, guid: 18b586179fd374f49aeec48874f3f180, type: 3}
   explosionLayerMask:
     serializedVersion: 2
     m_Bits: 64
-  explosionDuration: 1
+  explosionDuration: 0.5
   explosionRadius: 1
   destructibleTiles: {fileID: 1998781636}
   destructibleMappings:
@@ -817,7 +843,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 447133308}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: acd0bc49a47044b4a97fa2a38eaed40c, type: 3}
   m_Name: 
@@ -915,6 +941,30 @@ Transform:
   - {fileID: 291210971}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &447133314
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 447133308}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: faaf2ddc577f48549a365aaef63c6a51, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  speed: 5
+  level: 1
+  waitTime: 0.5
+  inputUp: 119
+  inputDown: 115
+  inputLeft: 97
+  inputRight: 100
+  spriteRendererUp: {fileID: 1899064176}
+  spriteRendererDown: {fileID: 1007769460}
+  spriteRendererLeft: {fileID: 329979437}
+  spriteRendererRight: {fileID: 856135190}
+  spriteRendererDeath: {fileID: 291210969}
 --- !u!1 &469301948
 GameObject:
   m_ObjectHideFlags: 0
@@ -1208,6 +1258,52 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &550125916
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 550125917}
+  - component: {fileID: 550125918}
+  m_Layer: 0
+  m_Name: MapManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &550125917
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 550125916}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &550125918
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 550125916}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ae16292fe6ffd944b8ec0fb10d831a09, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  width: 18
+  height: 10
 --- !u!1 &614121422
 GameObject:
   m_ObjectHideFlags: 0
@@ -2786,7 +2882,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   inputKey: 32
   bombPrefab: {fileID: 1837472977424166251, guid: cf81ec2d2b72eb842944d163edc1b905, type: 3}
-  bombFuseTime: 2
+  bombFuseTime: 3
   bombAmount: 1
   explosionPrefab: {fileID: 4371993275056605798, guid: 283da4692c9b6444a8998072edcec491, type: 3}
   explosionLayerMask:
@@ -2835,12 +2931,12 @@ MonoBehaviour:
   selectedGameMode: 0
   players:
   - {fileID: 904579620}
-  - {fileID: 447133308}
+  - {fileID: 0}
   - {fileID: 1818614530}
   - {fileID: 422760910}
   spawnPoints:
   - {fileID: 904579624}
-  - {fileID: 447133313}
+  - {fileID: 0}
   - {fileID: 1818614535}
   - {fileID: 422760915}
   destructibleTiles: {fileID: 1998781636}
@@ -5206,9 +5302,10 @@ GameObject:
   - component: {fileID: 1818614533}
   - component: {fileID: 1818614532}
   - component: {fileID: 1818614531}
+  - component: {fileID: 1818614536}
   m_Layer: 7
-  m_Name: Player 3
-  m_TagString: Player
+  m_Name: Enemy 1
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -5225,9 +5322,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9d06995ecd10e884ea6fb063acae5132, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  inputKey: 32
+  inputKey: 282
   bombPrefab: {fileID: 1837472977424166251, guid: cf81ec2d2b72eb842944d163edc1b905, type: 3}
-  bombFuseTime: 2
+  bombFuseTime: 3
   bombAmount: 1
   explosionPrefab: {fileID: 4371993275056605798, guid: 283da4692c9b6444a8998072edcec491, type: 3}
   explosionLayerMask:
@@ -5250,7 +5347,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1818614530}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: acd0bc49a47044b4a97fa2a38eaed40c, type: 3}
   m_Name: 
@@ -5348,6 +5445,30 @@ Transform:
   - {fileID: 1491911452}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1818614536
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1818614530}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: faaf2ddc577f48549a365aaef63c6a51, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  speed: 10
+  level: 1
+  waitTime: 1
+  inputUp: 119
+  inputDown: 115
+  inputLeft: 97
+  inputRight: 100
+  spriteRendererUp: {fileID: 1171135760}
+  spriteRendererDown: {fileID: 2063920510}
+  spriteRendererLeft: {fileID: 972790924}
+  spriteRendererRight: {fileID: 2071729277}
+  spriteRendererDeath: {fileID: 1491911450}
 --- !u!1 &1899064175
 GameObject:
   m_ObjectHideFlags: 0
@@ -6295,3 +6416,4 @@ SceneRoots:
   - {fileID: 422760915}
   - {fileID: 403813017}
   - {fileID: 935890507}
+  - {fileID: 550125917}

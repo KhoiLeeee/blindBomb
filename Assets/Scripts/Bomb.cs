@@ -6,9 +6,11 @@ public class Bomb : MonoBehaviour
     private float remainingTime;
     private int explosionRadius = 1;
 
-    private void Start()
+    public void Initialize(float fuse, int radius)
     {
-        remainingTime = fuseTime;
+        fuseTime = fuse;
+        remainingTime = fuse;
+        explosionRadius = radius;
     }
 
     // Update is called once per frame
@@ -25,11 +27,6 @@ public class Bomb : MonoBehaviour
     public float GetRemainingTime()
     {
         return remainingTime;
-    }
-
-    public void SetExplosionRadius(int explosionRadius)
-    {
-        this.explosionRadius = explosionRadius;
     }
     public int GetExplosionRadius()
     {

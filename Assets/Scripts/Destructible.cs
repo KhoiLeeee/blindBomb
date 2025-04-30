@@ -5,7 +5,7 @@ public class Destructible : MonoBehaviour
 {
     public float destructionTime = 1f;
     [Range(0f, 1f)]
-    public float itemSpawnChance = 0.2f;
+    public float itemSpawnChance = 0.9f;
     public GameObject[] spawnableItems;
 
     private void Start()
@@ -18,11 +18,10 @@ public class Destructible : MonoBehaviour
         if (spawnableItems.Length > 0 && Random.value < itemSpawnChance)
         {
             int randomIndex = Random.Range(0, spawnableItems.Length);
-            Instantiate(spawnableItems[randomIndex], transform.position, Quaternion.identity);
+            GameObject spawnedItem = Instantiate(spawnableItems[randomIndex], transform.position, Quaternion.identity);
+            //Vector2Int cell = new Vector2Int(Mathf.FloorToInt(transform.position.x), Mathf.FloorToInt(transform.position.y));
 
-            Vector2Int cell = new Vector2Int(Mathf.FloorToInt(transform.position.x), Mathf.FloorToInt(transform.position.y));
-            //MapManager.Instance.SetCell(cell, CellType.Item);
-            //GameManager.AddCoins(spawnableItems[randomIndex]);
+            GameManager.AddCoins(spawnedItem);
         }
     }
 

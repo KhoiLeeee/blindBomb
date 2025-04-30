@@ -11,14 +11,14 @@ public class BombController : MonoBehaviour
     [Header("Bomb")]
     public KeyCode inputKey = KeyCode.LeftShift;
     public GameObject bombPrefab;
-    public float bombFuseTime = 3f;
+    public float bombFuseTime = 4f;
     public int bombAmount = 1;
     private int bombsRemaining;
 
     [Header("Explosion")]
     public Explosion explosionPrefab;
     public LayerMask explosionLayerMask;
-    public float explosionDuration = 1f;
+    public float explosionDuration = 0.5f;
     public int explosionRadius = 1;
 
     [Header("Destructible")]
@@ -60,13 +60,12 @@ public class BombController : MonoBehaviour
         if (bombComponent == null)
         {
             bombComponent = bomb.AddComponent<Bomb>();
-            bombComponent.fuseTime = bombFuseTime;
-            bombComponent.SetExplosionRadius(explosionRadius); // Can random
         }
+        bombComponent.Initialize(bombFuseTime, explosionRadius); // ExplosionRadius can be random
         bombsRemaining--;
         // Set Bomb Cell in MapGrid
-        //Vector2Int cell = new Vector2Int(Mathf.FloorToInt(position.x), Mathf.FloorToInt(position.y));
-        //MapManager.Instance.SetCell(cell, CellType.Bomb);
+        Vector2Int cell = new Vector2Int(Mathf.FloorToInt(transform.position.x), Mathf.FloorToInt(transform.position.y));
+        MapManager.Instance.SetCell(cell, CellType.Bomb);
 
         yield return new WaitForSeconds(bombFuseTime);
         Debug.Log("Bomb explode");
@@ -74,7 +73,7 @@ public class BombController : MonoBehaviour
         position.x = Mathf.Floor(position.x) + 0.5f;
         position.y = Mathf.Floor(position.y) + 0.5f;
         // Set Empty Cell in MapGrid when exploding
-        //MapManager.Instance.SetCell(cell, CellType.Empty);
+        MapManager.Instance.SetCell(cell, CellType.Empty);
 
         Explosion explosion = Instantiate(explosionPrefab, position, Quaternion.identity);
         explosion.SetActiveRenderer(explosion.start);
@@ -118,7 +117,7 @@ public class BombController : MonoBehaviour
         explosion.DestroyAfter(explosionDuration);
 
         // Set Explosion Cell and clear after delay
-        //MapManager.Instance.SetCell(cell, CellType.Explosion);
+        MapManager.Instance.SetCell(cell, CellType.Explosion);
         StartCoroutine(ClearExplosionAfterDelay(cell, explosionDuration));
 
         Explode(position, direction, length - 1);
@@ -127,10 +126,10 @@ public class BombController : MonoBehaviour
     {
         yield return new WaitForSeconds(delay);
 
-        //if (MapManager.Instance.GetCell(cell) == CellType.Explosion)
-        //{
-        //    MapManager.Instance.SetCell(cell, CellType.Empty);
-        //}
+        if (MapManager.Instance.GetCell(cell) == CellType.Explosion)
+        {
+            MapManager.Instance.SetCell(cell, CellType.Empty);
+        }
     }
 
     private void ClearDestructible(Vector2 position)
@@ -147,7 +146,7 @@ public class BombController : MonoBehaviour
                     Instantiate(mapping.prefab, position, Quaternion.identity);
                     destructibleTiles.SetTile(cell, null);
                     Vector2Int block = new Vector2Int(cell.x, cell.y);
-                    //MapManager.Instance.SetCell(block, CellType.Empty);
+                    MapManager.Instance.SetCell(block, CellType.Empty);
                     break;
                 }
             }

@@ -1,6 +1,7 @@
 using NUnit.Framework;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using static UnityEditor.PlayerSettings;
@@ -14,7 +15,6 @@ public class GameManager : MonoBehaviour
     private static GameObject[] enemies;
 
     private static List<GameObject> coins = new List<GameObject>();
-    private static List<Explosion> explosions = new List<Explosion>();
     private static Dictionary<string, int> scores = new Dictionary<string, int>();
     private static Dictionary<string, int> hearts = new Dictionary<string, int>();
     private static Dictionary<string, int> explosion_ranges = new Dictionary<string, int>();
@@ -213,6 +213,7 @@ public class GameManager : MonoBehaviour
     {
         coins.Remove(gameObject);
     }
+
     public static int GetBombLeft(string agent_name)
     {
         foreach (GameObject gameObject in players)
@@ -243,7 +244,7 @@ public class GameManager : MonoBehaviour
             if (gameObject.name != agent_name)
             {
                 Vector3 pos = gameObject.transform.position;
-                positions.Add(new Vector2Int((int)pos.x, (int)pos.y));
+                positions.Add(new Vector2Int(Mathf.FloorToInt(pos.x), Mathf.FloorToInt(pos.y)));
             }
         }
 
@@ -252,7 +253,7 @@ public class GameManager : MonoBehaviour
             if (gameObject.name != agent_name)
             {
                 Vector3 pos = gameObject.transform.position;
-                positions.Add(new Vector2Int((int)pos.x, (int)pos.y));
+                positions.Add(new Vector2Int(Mathf.FloorToInt(pos.x), Mathf.FloorToInt(pos.y)));
             }
         }
         return positions;

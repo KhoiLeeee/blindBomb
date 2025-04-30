@@ -252,7 +252,8 @@ public class V2RuleBased : MonoBehaviour
         HashSet<Tuple<int, int>> result = new HashSet<Tuple<int, int>>();
         foreach (var coin in coins)
         {
-            var pos = new Vector2Int((int)coin.transform.position.x, (int)coin.transform.position.y);
+            if (coin == null) continue;
+            Vector2Int pos = new Vector2Int((int)coin.transform.position.x, (int)coin.transform.position.y);
             result.Add(MapManager.Instance.Vec2IntToGridBased(pos));
         }
 

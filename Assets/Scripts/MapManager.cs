@@ -24,12 +24,6 @@ public class MapManager : MonoBehaviour
     public int height;
     private CellType[,] mapGrid;
     private  int[,] explosionMap;
-    //[Range(1, 4)]
-    //public int players;
-    //[Range(0, 3)]
-    //public int enemies;
-
-
     private void Awake()
     {
         if (Instance == null)
@@ -88,7 +82,7 @@ public class MapManager : MonoBehaviour
             {
                 row += mapGrid[x, y].ToString().PadRight(10); // Add some spacing if you want
             }
-            if (y == 3)
+            if (y == 1)
             {
                 Debug.Log(y);
                 Debug.Log(row);
@@ -173,10 +167,11 @@ public class MapManager : MonoBehaviour
         {
             if (bomb == null) continue;
             Bomb bombComponent = bomb.GetComponent<Bomb>();
-            Tuple<int, int> bombPos = Vec2IntToGridBased(new Vector2Int((int)bomb.transform.position.x, (int)bomb.transform.position.y));
+            Tuple<int, int> bombPos = Vec2IntToGridBased(new Vector2Int(Mathf.FloorToInt(bomb.transform.position.x), Mathf.FloorToInt(bomb.transform.position.y)));
             int x = bombPos.Item1;
             int y = bombPos.Item2;
-            int remainTime = (int)bombComponent.GetRemainingTime();
+
+            int remainTime = (int)bombComponent.GetRemainingTime() + 1;
             explosionMap[x, y] = Mathf.Max(explosionMap[x, y], remainTime);
             for (int i = 1; i <= bombComponent.GetExplosionRadius(); i++)
             {
@@ -193,38 +188,5 @@ public class MapManager : MonoBehaviour
         UpdateExplosionMap();
         return explosionMap;
     }
-
-    //private void SetCellAgent()
-    //{
-    //    switch (players, enemies)
-    //    {
-    //        case (1, 3): // 1 Player, # Enemies
-    //            mapGrid[1, height - 2] = CellType.Player;
-    //            mapGrid[width - 2, height - 2] = CellType.Enemy;
-    //            mapGrid[1, 1] = CellType.Enemy;
-    //            mapGrid[width - 2, 1] = CellType.Enemy;
-    //            break;
-    //        case (2, 2): // 2 Player in a teams, attack 2 enemies
-    //            mapGrid[1, height - 2] = CellType.Player;
-    //            mapGrid[width - 2, height - 2] = CellType.Player;
-    //            mapGrid[1, 1] = CellType.Enemy;
-    //            mapGrid[width - 2, 1] = CellType.Enemy;
-    //            break;
-    //        case (1, 1): // Player battle with Enemy
-    //            mapGrid[1, height - 2] = CellType.Player;
-    //            mapGrid[width - 2, 1] = CellType.Enemy;
-    //            break;
-    //        case (2, 0): // 2 Player combat
-    //            mapGrid[1, height - 2] = CellType.Player;
-    //            mapGrid[width - 2, 1] = CellType.Player;
-    //            break;
-    //        case (4, 0): // 4 Players
-    //            mapGrid[1, height - 2] = CellType.Player;
-    //            mapGrid[width - 2, height - 2] = CellType.Player;
-    //            mapGrid[1, 1] = CellType.Player;
-    //            mapGrid[width - 2, 1] = CellType.Player;
-    //            break;
-    //    }
-    //}
 
 }

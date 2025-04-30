@@ -14,7 +14,7 @@ public class RuleBasedAgent : MonoBehaviour
     public float speed = 5f;
     public int level;
     private bool isWaiting = false;
-    private float waitTime = 1f;
+    public float waitTime = 0.5f;
 
     private Queue<Tuple<int, int>> bombHistory = new Queue<Tuple<int, int>>(5);
     private Queue<Tuple<int, int>> coordinateHistory = new Queue<Tuple<int, int>>(20);
@@ -43,17 +43,17 @@ public class RuleBasedAgent : MonoBehaviour
     private void Start()
     {
         agentName = gameObject.name;
-        Debug.Log("This is: " + agentName);
+        //Debug.Log("This is: " + agentName);
 
         switch (level) {
             case 0:
-                ApplySimpleRuleBased();
+                ApplyRuleBasedMedium();
                 break;
             case 1:
                 ApplyComplexRuleBased();
                 break;
             default:
-                ApplySimpleRuleBased();
+                ApplyRuleBasedMedium();
                 break;
         }
     }
@@ -62,12 +62,12 @@ public class RuleBasedAgent : MonoBehaviour
         if (isWaiting) return;
 
         Vector2 playerPosition = transform.position;
-        Tuple<int, int> pos = Tuple.Create((int)playerPosition.x, (int)playerPosition.y);
+        Tuple<int, int> pos = Tuple.Create(Mathf.FloorToInt(playerPosition.x), Mathf.FloorToInt(playerPosition.y));
         EnqueueWithLimit(bombHistory, pos, 5);
         EnqueueWithLimit(coordinateHistory, pos, 20);
 
         string action = ApplyComplexRuleBased();
-        Debug.Log(action);
+        Debug.Log("Action: " + action);
 
         StartCoroutine(PerformActionWithDelay(action));
     }
@@ -113,7 +113,7 @@ public class RuleBasedAgent : MonoBehaviour
             Mathf.FloorToInt(position.y)
         );
         Vector2Int newCell = new Vector2Int(
-            Mathf.FloorToInt(position.x + translation.x),
+           Mathf.FloorToInt(position.x + translation.x),
             Mathf.FloorToInt(position.y + translation.y)
         );
 
@@ -164,12 +164,134 @@ public class RuleBasedAgent : MonoBehaviour
         GameManager.Instance.CheckWinState();
     }
 
-    private void ApplySimpleRuleBased()
+    private string ApplyRuleBasedMedium()
     {
+        CellType[,] mapGrid = MapManager.Instance.getMapGrid();
+        int bomb_left = GameManager.GetBombLeft(this.agentName);
+        Vector2Int position = new Vector2Int(Mathf.FloorToInt(rb.position.x), Mathf.FloorToInt(rb.position.y));
+        Tuple<int, int> self_position = MapManager.Instance.Vec2IntToGridBased(position);
 
+        List<GameObject> bombs = GameManager.GetAllBombs();
+        List<Tuple<int, int>> bomb_position = new List<Tuple<int, int>>();
+        float[,] bombMap = new float[mapGrid.GetLength(0), mapGrid.GetLength(1)];
+        for (int i = 0; i < bombMap.GetLength(0); i++)
+            for (int j = 0; j < bombMap.GetLength(1); j++)
+                bombMap[i, j] = 5f;
+
+        foreach (GameObject bomb in bombs)
+        {
+            if (bomb == null) continue;
+            Bomb bomb_component = bomb.GetComponent<Bomb>();
+            Vector2Int pos = new Vector2Int(Mathf.FloorToInt(bomb.transform.position.x), Mathf.FloorToInt(bomb.transform.position.y));
+            Tuple<int, int> bombXY = MapManager.Instance.Vec2IntToGridBased(pos);
+            bomb_position.Add(bombXY);
+
+            for (int h = -3; h <= 3; h++)
+            {
+                Tuple<int, int>[] points = {
+                Tuple.Create(bombXY.Item1 + h, bombXY.Item2),
+                Tuple.Create(bombXY.Item1, bombXY.Item2 + h)
+            };
+                foreach (var point in points)
+                {
+                    if (point.Item1 > 0 && point.Item1 < bombMap.GetLength(0) &&
+                        point.Item2 > 0 && point.Item2 < bombMap.GetLength(1))
+                        bombMap[point.Item1, point.Item2] = Mathf.Min(bombMap[point.Item1, point.Item2], bomb_component.GetRemainingTime());
+                }
+            }
+        }
+
+        List<Tuple<int, int>> other_position = MapManager.Instance.Vec2IntToGridBased(GameManager.GetOtherPosition(this.agentName));
+        int[,] explosionMap = MapManager.Instance.GetExplosionMap();
+
+        Tuple<int, int>[] directions = {
+        self_position,
+        Tuple.Create(self_position.Item1 + 1, self_position.Item2),
+        Tuple.Create(self_position.Item1 - 1, self_position.Item2),
+        Tuple.Create(self_position.Item1, self_position.Item2 + 1),
+        Tuple.Create(self_position.Item1, self_position.Item2 - 1),
+    };
+
+        List<Tuple<int, int>> validTiles = new List<Tuple<int, int>>();
+        List<string> validActions = new List<string>();
+        foreach (var dir in directions)
+        {
+            int x = dir.Item1;
+            int y = dir.Item2;
+            if (mapGrid[x, y] == CellType.Empty && bombMap[x, y] > 0.5f && explosionMap[x, y] <= 1
+                && !other_position.Contains(dir) && !bomb_position.Contains(dir))
+            {
+                validTiles.Add(dir);
+            }
+        }
+
+        if (validTiles.Contains(Tuple.Create(self_position.Item1 - 1, self_position.Item2))) validActions.Add("LEFT");
+        if (validTiles.Contains(Tuple.Create(self_position.Item1 + 1, self_position.Item2))) validActions.Add("RIGHT");
+        if (validTiles.Contains(Tuple.Create(self_position.Item1, self_position.Item2 - 1))) validActions.Add("DOWN");
+        if (validTiles.Contains(Tuple.Create(self_position.Item1, self_position.Item2 + 1))) validActions.Add("UP");
+        if (validTiles.Contains(self_position)) validActions.Add("WAIT");
+
+        if (bomb_left > 0 && HasSafeEscape(self_position, bombMap))
+            validActions.Add("BOMB");
+
+        List<GameObject> coins = GameManager.GetCoins();
+        List<Tuple<int, int>> coin_position = new List<Tuple<int, int>>();
+        foreach (var coin in coins)
+        {
+            Vector2Int pos = new Vector2Int((int)coin.transform.position.x, (int)coin.transform.position.y);
+            coin_position.Add(MapManager.Instance.Vec2IntToGridBased(pos));
+        }
+
+        bool[,] freeSpace = new bool[mapGrid.GetLength(0), mapGrid.GetLength(1)];
+        for (int i = 0; i < mapGrid.GetLength(0); i++)
+            for (int j = 0; j < mapGrid.GetLength(1); j++)
+                freeSpace[i, j] = (mapGrid[i, j] == CellType.Empty);
+
+        foreach (var o in other_position)
+            freeSpace[o.Item1, o.Item2] = false;
+
+        Tuple<int, int> target = LookForTargets(freeSpace, self_position, coin_position);
+
+        List<string> actionIdeas = new List<string>();
+        if (target != null)
+        {
+            if (target.Equals(Tuple.Create(self_position.Item1, self_position.Item2 + 1))) actionIdeas.Add("UP");
+            if (target.Equals(Tuple.Create(self_position.Item1, self_position.Item2 - 1))) actionIdeas.Add("DOWN");
+            if (target.Equals(Tuple.Create(self_position.Item1 - 1, self_position.Item2))) actionIdeas.Add("LEFT");
+            if (target.Equals(Tuple.Create(self_position.Item1 + 1, self_position.Item2))) actionIdeas.Add("RIGHT");
+        }
+        else
+        {
+            actionIdeas.Add("WAIT");
+        }
+
+        foreach (var enemy in other_position)
+        {
+            int dist = Mathf.Abs(enemy.Item1 - self_position.Item1) + Mathf.Abs(enemy.Item2 - self_position.Item2);
+            if (dist <= 1)
+            {
+                actionIdeas.Add("BOMB");
+                break;
+            }
+        }
+
+        actionIdeas.Add("WAIT");
+
+        while (actionIdeas.Count > 0)
+        {
+            string a = actionIdeas[actionIdeas.Count - 1];
+            actionIdeas.RemoveAt(actionIdeas.Count - 1);
+            if (validActions.Contains(a))
+            {
+                if (a == "BOMB") bombHistory.Enqueue(self_position);
+                return a;
+            }
+        }
+        return "WAIT";
     }
 
-    
+
+
     private string ApplyComplexRuleBased()
     {
         CellType[,] mapGrid = MapManager.Instance.getMapGrid();
@@ -181,16 +303,15 @@ public class RuleBasedAgent : MonoBehaviour
 
         List<GameObject> coins = GameManager.GetCoins();
         List<Tuple<int, int>> coin_position = new List<Tuple<int, int>>();
-        foreach (GameObject coin in coins)
+        foreach (var coin in coins)
         {
-            Vector3 coin_pos = coin.transform.position;
-            int x = (int)coin_pos.x;
-            int y = (int)coin_pos.y;
-            coin_position.Add(Tuple.Create(x, y));
+            if (coin == null) continue;
+            Vector2Int pos = new Vector2Int((int)coin.transform.position.x, (int)coin.transform.position.y);
+            coin_position.Add(MapManager.Instance.Vec2IntToGridBased(pos));
         }
         List<GameObject> bombs = GameManager.GetAllBombs();
 
-        Vector2Int position = new Vector2Int((int)rb.position.x, (int)rb.position.y);
+        Vector2Int position = new Vector2Int(Mathf.FloorToInt(rb.position.x), Mathf.FloorToInt(rb.position.y));
         Tuple<int, int> self_position = MapManager.Instance.Vec2IntToGridBased(position);
 
         List<Vector2Int> vector2Ints = GameManager.GetOtherPosition(this.agentName);
@@ -207,7 +328,7 @@ public class RuleBasedAgent : MonoBehaviour
         {
             if (bomb == null) continue;
             Bomb bomb_component = bomb.GetComponent<Bomb>();
-            Vector2Int pos = new Vector2Int((int)bomb.transform.position.x, (int)bomb.transform.position.y);
+            Vector2Int pos = new Vector2Int(Mathf.FloorToInt(bomb.transform.position.x), Mathf.FloorToInt(bomb.transform.position.y));
             Tuple<int, int> bombXY = MapManager.Instance.Vec2IntToGridBased(pos);
             bomb_position.Add(bombXY);
                 
@@ -220,7 +341,6 @@ public class RuleBasedAgent : MonoBehaviour
 
                 foreach(Tuple<int, int> point in points)
                 {
-                    Debug.Log("TIme remaing: " + bomb_component.GetRemainingTime());
                     if (point.Item1 > 0 && point.Item1 < bombMap.GetLength(0) && point.Item2 > 0 && point.Item2 < bombMap.GetLength(1))
                         bombMap[point.Item1, point.Item2] = Mathf.Min(bombMap[point.Item1, point.Item2], bomb_component.GetRemainingTime());
                 }
@@ -248,11 +368,12 @@ public class RuleBasedAgent : MonoBehaviour
         List<string> validActions = new List<string>();
 
         int[,] explosionMap = MapManager.Instance.GetExplosionMap();
+      
         foreach(var direction in directions)
         {
             int x = direction.Item1;
             int y = direction.Item2;
-            if (mapGrid[x, y] == CellType.Empty && bombMap[x, y] > 0 && explosionMap[x, y] <= 1
+            if (mapGrid[x, y] == CellType.Empty && bombMap[x, y] > 0.5 && explosionMap[x, y] <= 2
                 && !other_position.Contains(direction) && !bomb_position.Contains(direction))
             {
                 validTiles.Add(direction);
@@ -270,7 +391,7 @@ public class RuleBasedAgent : MonoBehaviour
         List<string> actionIdeas = new List<string> { "UP", "DOWN", "LEFT", "RIGHT" };
         Shuffle(actionIdeas);
 
-        List<Tuple<int, int>> targets = new List<Tuple<int, int>>(); // Lack code
+        List<Tuple<int, int>> targets = new List<Tuple<int, int>>();
         List<Tuple<int, int>> deadEnds = new List<Tuple<int, int>>();
         List<Tuple<int, int>> destructable = new List<Tuple<int, int>>();
 
@@ -294,14 +415,6 @@ public class RuleBasedAgent : MonoBehaviour
                 }
             }
         }
-
-        //string bombS = "";
-        //foreach (var dead in bomb_position)
-        //{
-        //    string s = "(" + dead.Item1.ToString() + ":" + dead.Item2.ToString() + ")" + ",";
-        //    bombS += s;
-        //}
-        //Debug.Log("Bomb: " + bombS);
 
         targets.AddRange(coin_position);
         targets.AddRange(deadEnds);
@@ -331,14 +444,12 @@ public class RuleBasedAgent : MonoBehaviour
 
         if (direct != null)
         {
-            Debug.Log("LOOKFOR: " + direct.ToString() + " | POS: " + self_position.ToString());
             if (direct == Tuple.Create(self_position.Item1, self_position.Item2 + 1)) actionIdeas.Add("UP");
             if (direct == Tuple.Create(self_position.Item1, self_position.Item2 - 1)) actionIdeas.Add("DOWN");
             if (direct == Tuple.Create(self_position.Item1 - 1, self_position.Item2)) actionIdeas.Add("LEFT");
             if (direct == Tuple.Create(self_position.Item1 + 1, self_position.Item2)) actionIdeas.Add("RIGHT");
         } else
         {
-            Debug.Log("All targets gone, nothing to do anymore");
             actionIdeas.Add("WAIT");
         }
         if (deadEnds.Contains(self_position)) actionIdeas.Add("BOMB");
@@ -358,7 +469,6 @@ public class RuleBasedAgent : MonoBehaviour
 
         if (direct != null && direct.Equals(self_position))
         {
-            Debug.Log("EQUALLLL");
             int count = 0;
             if (mapGrid[self_position.Item1 + 1, self_position.Item2] == CellType.DestructibleWall) count++;
             if (mapGrid[self_position.Item1 - 1, self_position.Item2] == CellType.DestructibleWall) count++;
@@ -398,12 +508,7 @@ public class RuleBasedAgent : MonoBehaviour
                 actionIdeas.AddRange(actionIdeas.GetRange(0, count));
             }
         }
-        string actions = "";
-        foreach (string s in actionIdeas)
-        {
-            actions += s + " ";
-        }
-        Debug.Log("Idea: " + actions);
+  
         while (actionIdeas.Count > 0)
         {
             string a = actionIdeas[actionIdeas.Count - 1];
@@ -557,7 +662,7 @@ public class RuleBasedAgent : MonoBehaviour
             if (dir.Item1 >= 0 && dir.Item1 < bombMap.GetLength(0) &&
                 dir.Item2 >= 0 && dir.Item2 < bombMap.GetLength(1))
             {
-                if (bombMap[dir.Item1, dir.Item2] > 1.5f)  // Enough time to run
+                if (bombMap[dir.Item1, dir.Item2] > 1.5f)
                     return true;
             }
         }

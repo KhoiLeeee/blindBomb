@@ -2,7 +2,7 @@
 - Project name: blindBomb
 - Unity version: Unity 6000.0.45f1
 - Active game object:
-  - Name: Player 2
-  - Tag: Player
+  - Name: Enemy 2
+  - Tag: Enemy
   - Layer: Player
 <!-- UNITY CODE ASSIST INSTRUCTIONS END -->
