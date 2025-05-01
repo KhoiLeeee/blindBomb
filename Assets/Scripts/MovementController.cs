@@ -8,7 +8,7 @@ public class MovementController : MonoBehaviour
     private Rigidbody2D rb;
     private Vector2 direction = Vector2.down;
     private Vector2 moveTargetPos;
-    public float speed = 5f;
+    public float speed = 2f;
     private Vector2Int startCell;
     private Vector2Int targetCell;
     private bool isMoving = false;
@@ -47,7 +47,7 @@ public class MovementController : MonoBehaviour
             string s = "(" + pos.Item1.ToString() + ":" + pos.Item2.ToString() + "),";
             coinS += s;
         }
-        Debug.Log(coinS);
+        // Debug.Log(coinS);
 
         if (Input.GetKey(inputUp))
         {
@@ -132,6 +132,6 @@ public class MovementController : MonoBehaviour
     private void OnDeathSequenceEnded()
     {
         gameObject.SetActive(false);
-        GameManager.Instance.CheckWinState();
+        Manager.Instance.CheckWinCondition();
     }
 }

@@ -23,7 +23,8 @@ public class ItemPickup : MonoBehaviour
                 break;
 
             case ItemType.BlastRadius:
-                player.GetComponent<BombController>().explosionRadius++;
+                player.GetComponent<BombController>().explosionRadiusMin++;
+                player.GetComponent<BombController>().explosionRadiusMax++;
                 break;
 
             case ItemType.SpeedIncrease:

@@ -11,7 +11,7 @@ public class RuleBasedAgent : MonoBehaviour
     private Rigidbody2D rb;
     private Vector2 direction = Vector2.down;
     private string agentName;
-    public float speed = 5f;
+    public float speed = 4f;
     public int level;
     private bool isWaiting = false;
     public float waitTime = 0.5f;
@@ -161,7 +161,7 @@ public class RuleBasedAgent : MonoBehaviour
     private void OnDeathSequenceEnded()
     {
         gameObject.SetActive(false);
-        GameManager.Instance.CheckWinState();
+        Manager.Instance.CheckWinCondition();
     }
 
     private string ApplyRuleBasedMedium()
