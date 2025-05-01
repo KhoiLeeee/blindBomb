@@ -8,7 +8,7 @@ public class MovementController : MonoBehaviour
     private Rigidbody2D rb;
     private Vector2 direction = Vector2.down;
     private Vector2 moveTargetPos;
-    public float speed = 5f;
+    public float speed = 2f;
     private Vector2Int startCell;
     private Vector2Int targetCell;
     public string playerID;
@@ -142,6 +142,6 @@ public class MovementController : MonoBehaviour
     private void OnDeathSequenceEnded()
     {
         gameObject.SetActive(false);
-        GameManager.Instance.CheckWinState();
+        Manager.Instance.CheckWinCondition();
     }
 }

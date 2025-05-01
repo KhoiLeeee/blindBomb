@@ -1,26 +1,25 @@
 using System.Collections.Generic;
 using System.Linq;
+using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.Tilemaps;
 
 public class Manager : MonoBehaviour
 {
-    public enum MapType { Fixed, Random }
-    public enum GameMode { OneVsOne, TwoVsTwo, OneVsThree }
+    public static Manager Instance { get; private set; }
 
-    public MapType selectedMapType;
-    public GameMode selectedGameMode;
-
-    public GameObject[] players; // 0-3
-    public Transform[] spawnPoints; // fixed positions for 4 players
+    public GameObject[] players;
+    public GameObject[] enemies;
 
     private List<GameObject> teamA = new List<GameObject>();
     private List<GameObject> teamB = new List<GameObject>();
 
     public GameObject pauseGameScreen;
-    public GameObject continueButton;
-    public GameObject backToMenuButton;
+    public GameObject endGameScreen;
+    public TMP_Dropdown playerNum;
+    public TMP_Dropdown AiNum;
+    public TMP_Dropdown mode;
 
     public Tilemap destructibleTiles;
     public Tilemap indestructibleTiles;
@@ -33,16 +32,39 @@ public class Manager : MonoBehaviour
     public int boxCount = 10;
     public int signCount = 10;
 
+    private void Awake()
+    {
+        if (Instance != null)
+        {
+            DestroyImmediate(gameObject);
+        }
+        else
+        {
+            Instance = this;
+        }
+    }
+
+    private void OnDestroy()
+    {
+        if (Instance == this)
+        {
+            Instance = null;
+        }
+    }
     void Start()
     {
         foreach (GameObject player in players)
         {
             player.SetActive(false);
         }
-        SetupTeams();
+        foreach (GameObject enemy in enemies)
+        {
+            enemy.SetActive(false);
+        }
         SpawnPlayers();
+        SetupTeams();
 
-        if (selectedMapType == MapType.Random)
+        if (DropdownData.mapType == "Normal")
         {
             ClearDestructibles();
             Debug.Log("Generating random map...");
@@ -50,59 +72,77 @@ public class Manager : MonoBehaviour
         }
         else
         {
-            LoadFixedMap();
+            foreach (GameObject player in players)
+            {
+                player.GetComponent<MovementController>().speed = 8f;
+                player.GetComponent<BombController>().AddBomb();
+                player.GetComponent<BombController>().AddBomb();
+                player.GetComponent<BombController>().explosionRadiusMin = 4;
+                player.GetComponent<BombController>().explosionRadiusMax = 6;
+            }
+            foreach (GameObject enemy in enemies)
+            {
+                enemy.GetComponent<RuleBasedAgent>().speed = 8f;
+                enemy.GetComponent<BombController>().AddBomb();
+                enemy.GetComponent<BombController>().AddBomb();
+                enemy.GetComponent<BombController>().explosionRadiusMin = 4;
+                enemy.GetComponent<BombController>().explosionRadiusMax = 6;
+            }
         }
-    }
-
-    void Update()
-    {
-        CheckWinCondition();
     }
 
     void SetupTeams()
     {
         teamA.Clear();
         teamB.Clear();
+        int playerNum = int.Parse(DropdownData.playerNumber);
+        int AiNum = int.Parse(DropdownData.AiNumber);
 
-        if (selectedGameMode == GameMode.OneVsOne)
-        {
-            teamA.Add(players[0]);
-            teamB.Add(players[3]);
-        }
-        else if(selectedGameMode == GameMode.TwoVsTwo) // 2v2
-        {
-            teamA.Add(players[0]);
-            teamA.Add(players[1]);
-            teamB.Add(players[2]);
-            teamB.Add(players[3]);
-        }
-        else
+
+        if (AiNum == 0)
         {
             teamA.Add(players[0]);
             teamB.Add(players[1]);
-            teamB.Add(players[2]);
-            teamB.Add(players[3]);
+        }
+        else
+        {
+            foreach (GameObject player in players)
+            {
+                if(player.activeInHierarchy)
+                {
+                    teamA.Add(player);
+                }
+            }
+            foreach (GameObject enemy in enemies)
+            {
+                if (enemy.activeInHierarchy)
+                {
+                    teamB.Add(enemy);
+                }
+            }
         }
     }
 
     void SpawnPlayers()
     {
-        int numPlayers = 4;
-        if (selectedGameMode == GameMode.OneVsOne)
-        {
-            numPlayers = 2;
-        }
-        for (int i = 0; i < numPlayers; i++)
+        int playerNum = int.Parse(DropdownData.playerNumber);
+        int AiNum = int.Parse(DropdownData.AiNumber);
+        Debug.Log(playerNum);
+        Debug.Log(AiNum);
+        for (int i = 0; i < playerNum; i++)
         {
             players[i].SetActive(true);
-            players[i].transform.position = spawnPoints[i].position;
+        }
+        for (int i = 0; i < AiNum; i++)
+        {
+            enemies[i].SetActive(true);
         }
     }
 
-    void CheckWinCondition()
+    public void CheckWinCondition()
     {
-        teamA.RemoveAll(player => player == null);
-        teamB.RemoveAll(player => player == null);
+        teamA.RemoveAll(player => player == null || !player.activeInHierarchy);
+        teamB.RemoveAll(player => player == null || !player.activeInHierarchy);
 
         if (teamA.Count == 0)
         {
@@ -114,10 +154,10 @@ public class Manager : MonoBehaviour
         }
     }
 
-    void EndGame(string message)
+    public void EndGame(string message)
     {
         Debug.Log(message);
-        // Show UI panel with "Play Again" / "Back to Menu"
+        endGameScreen.SetActive(true);
         Time.timeScale = 0f; // pause game
     }
 
@@ -187,7 +227,6 @@ public class Manager : MonoBehaviour
             placed++;
         }
     }
-    void LoadFixedMap() { /* your logic here */ }
 
     public void onPauseButtonClicked()
     {
@@ -202,6 +241,16 @@ public class Manager : MonoBehaviour
     
     public void onMenuButtonClicked()
     {
+        Time.timeScale = 1f;
         SceneManager.LoadScene("mainMenu");
+    }
+
+    public void onPlayAgainButtonClicked()
+    {
+        DropdownData.playerNumber = playerNum.options[playerNum.value].text;
+        DropdownData.AiNumber = AiNum.options[AiNum.value].text;
+        DropdownData.mapType = mode.options[mode.value].text;
+        Time.timeScale = 1f;
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 }

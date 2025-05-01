@@ -19,7 +19,8 @@ public class BombController : MonoBehaviour
     public Explosion explosionPrefab;
     public LayerMask explosionLayerMask;
     public float explosionDuration = 0.5f;
-    public int explosionRadius = 1;
+    public int explosionRadiusMin = 1;
+    public int explosionRadiusMax = 2;
 
     [Header("Destructible")]
     public Tilemap destructibleTiles;
@@ -75,6 +76,7 @@ public class BombController : MonoBehaviour
         {
             bombComponent = bomb.AddComponent<Bomb>();
         }
+        int explosionRadius = Random.Range(explosionRadiusMin, explosionRadiusMax+1);
         bombComponent.Initialize(bombFuseTime, explosionRadius); // ExplosionRadius can be random
         bombsRemaining--;
         // Set Bomb Cell in MapGrid
