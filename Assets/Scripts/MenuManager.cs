@@ -2,12 +2,12 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using System.Collections;
 using UnityEngine.Video;
+using TMPro;
 
 
 public class MenuManager : MonoBehaviour
 {
     public VideoPlayer videoPlayer;
-    public AudioSource musicSource;
     public GameObject canva;
 
     public GameObject playButton;
@@ -17,6 +17,10 @@ public class MenuManager : MonoBehaviour
 
     public GameObject modeChoosingPanel;
     public GameObject inputConfigPanel;
+
+    public TMP_Dropdown playerNum;
+    public TMP_Dropdown AiNum;
+    public TMP_Dropdown mode;
 
     public Texture2D customCursor;
     public Vector2 hotspot = Vector2.zero;
@@ -35,8 +39,13 @@ public class MenuManager : MonoBehaviour
 
     public void OnStartClicked()
     {
-        DontDestroyOnLoad(musicSource.gameObject);
-        musicSource.Play();
+        DropdownData.playerNumber = playerNum.options[playerNum.value].text;
+        DropdownData.AiNumber = AiNum.options[AiNum.value].text;
+        DropdownData.mapType = mode.options[mode.value].text;
+        if (MusicPlayer.Instance != null)
+        {
+            MusicPlayer.Instance.PlayMusic();
+        }
         videoPlayer.Prepare();
         videoPlayer.loopPointReached += OnVideoEnd;
         StartCoroutine(PlayWhenReady());
