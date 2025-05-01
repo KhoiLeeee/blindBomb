@@ -30,6 +30,7 @@ public class ItemPickup : MonoBehaviour
                 player.GetComponent<MovementController>().speed++;
                 break;
         }
+        SoundEffects.Instance.PlaySound("PickUp");
         GameManager.RemoveCoin(gameObject);
         Destroy(gameObject);
     }

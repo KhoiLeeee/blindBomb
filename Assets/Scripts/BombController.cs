@@ -9,7 +9,7 @@ public class BombController : MonoBehaviour
     private string agentName;
 
     [Header("Bomb")]
-    public KeyCode inputKey = KeyCode.LeftShift;
+    private  KeyCode inputKey = KeyCode.LeftShift; // Default for AI agent
     public GameObject bombPrefab;
     public float bombFuseTime = 4f;
     public int bombAmount = 1;
@@ -36,6 +36,18 @@ public class BombController : MonoBehaviour
     {
         bombsRemaining = bombAmount;
         agentName = gameObject.name;
+        if (agentName.Contains("Player"))
+        {
+            switch (agentName)
+            {
+                case "Player 1":
+                    inputKey = KeyBindingRegistry.Player1Keys["Bomb"];
+                    break;
+                case "Player 2":
+                    inputKey = KeyBindingRegistry.Player2Keys["Bomb"];
+                    break;
+            }
+        }
     }
 
     private void Update()
@@ -53,6 +65,8 @@ public class BombController : MonoBehaviour
         position.y = Mathf.Floor(position.y) + 0.5f;
 
         GameObject bomb = Instantiate(bombPrefab, position, Quaternion.identity);
+        //SoundEffects.Instance.PlaySound("Bomb");
+
         GameManager.AddBombs(agentName, bomb);
 
         Bomb bombComponent = bomb.GetComponent<Bomb>();
@@ -68,6 +82,8 @@ public class BombController : MonoBehaviour
         MapManager.Instance.SetCell(cell, CellType.Bomb);
 
         yield return new WaitForSeconds(bombFuseTime);
+        //SoundEffects.Instance.StopSound("Bomb");
+
         Debug.Log("Bomb explode");
         position = bomb.transform.position;
         position.x = Mathf.Floor(position.x) + 0.5f;
@@ -76,6 +92,8 @@ public class BombController : MonoBehaviour
         MapManager.Instance.SetCell(cell, CellType.Empty);
 
         Explosion explosion = Instantiate(explosionPrefab, position, Quaternion.identity);
+        //SoundEffects.Instance.PlaySound("Explosion");
+
         explosion.SetActiveRenderer(explosion.start);
         explosion.DestroyAfter(explosionDuration);
 
@@ -83,6 +101,7 @@ public class BombController : MonoBehaviour
         Explode(position, Vector2.down, explosionRadius);
         Explode(position, Vector2.left, explosionRadius);
         Explode(position, Vector2.right, explosionRadius);
+        //SoundEffects.Instance.StopSound("Explosion");
 
         Destroy(bomb);
         GameManager.RemoveBomb(agentName, bomb);

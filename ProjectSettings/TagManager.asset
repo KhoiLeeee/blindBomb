@@ -8,6 +8,8 @@ TagManager:
   - Destructible
   - Empty
   - Enemy
+  - Music
+  - Sound
   layers:
   - Default
   - TransparentFX

@@ -11,14 +11,13 @@ public class MovementController : MonoBehaviour
     public float speed = 5f;
     private Vector2Int startCell;
     private Vector2Int targetCell;
-    private bool isMoving = false;
-
+    public string playerID;
 
     [Header("Input")]
-    public KeyCode inputUp = KeyCode.W;
-    public KeyCode inputDown = KeyCode.S;
-    public KeyCode inputLeft = KeyCode.A;
-    public KeyCode inputRight = KeyCode.D;
+    private KeyCode inputUp = KeyCode.W;
+    private KeyCode inputDown = KeyCode.S;
+    private KeyCode inputLeft = KeyCode.A;
+    private KeyCode inputRight = KeyCode.D;
 
     [Header("Sprites")]
     public AnimatedSpriteRenderer spriteRendererUp;
@@ -32,22 +31,33 @@ public class MovementController : MonoBehaviour
     {
         rb = GetComponent<Rigidbody2D>();
         activeSpriteRenderer = spriteRendererDown;
+        AssignInputKey();
     }
 
+    private void AssignInputKey()
+    {
+        Dictionary<string, KeyCode> keyPair;
+        switch (playerID)
+        {
+            case "Player 1":
+                keyPair  = KeyBindingRegistry.Player1Keys;
+                break;
+            case "Player 2":
+                keyPair = KeyBindingRegistry.Player2Keys;
+                break;
+            default:
+                keyPair = KeyBindingRegistry.Player1Keys;
+                break;
+        }
+
+        inputUp = keyPair["Up"];
+        inputDown = keyPair["Down"];
+        inputLeft = keyPair["Left"];
+        inputRight = keyPair["Right"];
+    }
     private void Update()
     {
         List<GameObject> coins = GameManager.GetCoins();
-
-        string coinS = "";
-        foreach (var coin in coins)
-        {
-            if (coin == null) continue;
-            Vector2Int cell = new Vector2Int((int)coin.transform.position.x, (int)coin.transform.position.y);
-            Tuple<int, int> pos = MapManager.Instance.Vec2IntToGridBased(cell);
-            string s = "(" + pos.Item1.ToString() + ":" + pos.Item2.ToString() + "),";
-            coinS += s;
-        }
-        Debug.Log(coinS);
 
         if (Input.GetKey(inputUp))
         {

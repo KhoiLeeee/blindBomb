@@ -33,6 +33,7 @@ public class KeyRebindingManager : MonoBehaviour
     {
         popupPanel.SetActive(true);
 
+
         currentPlayer = _player;
         actionName = _actionName;
         currentKeyText = keyTextLabel;
@@ -77,11 +78,14 @@ public class KeyRebindingManager : MonoBehaviour
 
     public void ClosePopup()
     {
+
         popupPanel.SetActive(false);
     }
 
     private void CreateKeyButtons()
     {
+
+
         KeyCode[] allKeys = (KeyCode[])Enum.GetValues(typeof(KeyCode));
         HashSet<KeyCode> used = new HashSet<KeyCode>();
 

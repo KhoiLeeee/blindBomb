@@ -638,7 +638,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9d06995ecd10e884ea6fb063acae5132, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  inputKey: 282
   bombPrefab: {fileID: 1491869729406208120, guid: 6ae993a1c81fcaf409e8bfbca1456ab2, type: 3}
   bombFuseTime: 3
   bombAmount: 1
@@ -669,10 +668,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 5
-  inputUp: 273
-  inputDown: 274
-  inputLeft: 276
-  inputRight: 275
+  playerID: 
   spriteRendererUp: {fileID: 2119664203}
   spriteRendererDown: {fileID: 1502566296}
   spriteRendererLeft: {fileID: 1446793280}
@@ -818,7 +814,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9d06995ecd10e884ea6fb063acae5132, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  inputKey: 282
   bombPrefab: {fileID: 1491869729406208120, guid: 6ae993a1c81fcaf409e8bfbca1456ab2, type: 3}
   bombFuseTime: 3
   bombAmount: 1
@@ -849,10 +844,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 5
-  inputUp: 273
-  inputDown: 274
-  inputLeft: 276
-  inputRight: 275
+  playerID: 
   spriteRendererUp: {fileID: 1899064176}
   spriteRendererDown: {fileID: 1007769460}
   spriteRendererLeft: {fileID: 329979437}
@@ -2776,10 +2768,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 5
-  inputUp: 119
-  inputDown: 115
-  inputLeft: 97
-  inputRight: 100
+  playerID: Player 1
   spriteRendererUp: {fileID: 692019222}
   spriteRendererDown: {fileID: 1248278676}
   spriteRendererLeft: {fileID: 987673174}
@@ -2880,7 +2869,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9d06995ecd10e884ea6fb063acae5132, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  inputKey: 32
   bombPrefab: {fileID: 1837472977424166251, guid: cf81ec2d2b72eb842944d163edc1b905, type: 3}
   bombFuseTime: 3
   bombAmount: 1
@@ -2914,7 +2902,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &935890506
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2939,6 +2927,9 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 1818614535}
   - {fileID: 422760915}
+  pauseGameScreen: {fileID: 0}
+  continueButton: {fileID: 0}
+  backToMenuButton: {fileID: 0}
   destructibleTiles: {fileID: 1998781636}
   indestructibleTiles: {fileID: 614121425}
   barrelTile: {fileID: 11400000, guid: 7e2421b105596d6499195a1efefb851a, type: 2}
@@ -5321,7 +5312,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9d06995ecd10e884ea6fb063acae5132, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  inputKey: 282
   bombPrefab: {fileID: 1837472977424166251, guid: cf81ec2d2b72eb842944d163edc1b905, type: 3}
   bombFuseTime: 3
   bombAmount: 1

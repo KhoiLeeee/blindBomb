@@ -152,7 +152,7 @@ RectTransform:
   m_Father: {fileID: 627681803}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
+  m_AnchorMax: {x: 0.373, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 10, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -4985,7 +4985,7 @@ RectTransform:
   m_Father: {fileID: 1715814319}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
+  m_AnchorMax: {x: 0.765, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 10, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -8018,8 +8018,8 @@ RectTransform:
   - {fileID: 59320599}
   m_Father: {fileID: 539098325}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
+  m_AnchorMin: {x: 0.765, y: 0}
+  m_AnchorMax: {x: 0.765, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 20, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -8076,7 +8076,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1209672113
 RectTransform:
   m_ObjectHideFlags: 0
@@ -9959,7 +9959,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   videoPlayer: {fileID: 0}
-  musicSource: {fileID: 0}
   canva: {fileID: 0}
   playButton: {fileID: 848007455}
   settingsButton: {fileID: 1280897673}
@@ -9967,6 +9966,9 @@ MonoBehaviour:
   titleButton: {fileID: 933763277}
   modeChoosingPanel: {fileID: 1815565011}
   inputConfigPanel: {fileID: 1209672112}
+  playerNum: {fileID: 0}
+  AiNum: {fileID: 0}
+  mode: {fileID: 0}
   customCursor: {fileID: 2800000, guid: 6e8eeb7b6cc6c7842b81d66f58d7af1b, type: 3}
   hotspot: {x: 0, y: 0}
   cursorMode: 0
@@ -11234,8 +11236,8 @@ RectTransform:
   - {fileID: 2120544574}
   m_Father: {fileID: 863674211}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
+  m_AnchorMin: {x: 0.373, y: 0}
+  m_AnchorMax: {x: 0.373, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 20, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
