@@ -6,6 +6,25 @@ public static class KeyBindingRegistry
     public static Dictionary<string, KeyCode> Player1Keys = new();
     public static Dictionary<string, KeyCode> Player2Keys = new();
 
+    static KeyBindingRegistry()
+    {
+        if (Player1Keys.Count == 0)
+        {
+            Player1Keys.Add("Up", KeyCode.W);
+            Player1Keys.Add("Down", KeyCode.S);
+            Player1Keys.Add("Left", KeyCode.A);
+            Player1Keys.Add("Right", KeyCode.D);
+            Player1Keys.Add("Bomb", KeyCode.Space);
+        }
+        if (Player2Keys.Count == 0)
+        {
+            Player2Keys.Add("Up", KeyCode.UpArrow);
+            Player2Keys.Add("Down", KeyCode.DownArrow);
+            Player2Keys.Add("Left", KeyCode.LeftArrow);
+            Player2Keys.Add("Right", KeyCode.RightArrow);
+            Player2Keys.Add("Bomb", KeyCode.Return);
+        }
+    }
     public static HashSet<KeyCode> GetUnavailableKeys(string currentPlayer)
     {
         HashSet<KeyCode> used = new();
