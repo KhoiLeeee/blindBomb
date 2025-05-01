@@ -2,23 +2,28 @@ using UnityEngine;
 
 public class MusicPlayer : MonoBehaviour
 {
-    private static MusicPlayer instance;
+    public static MusicPlayer Instance { get; private set; }
+    public AudioSource audioSource;
 
     void Awake()
     {
-        if (instance == null)
+        if (Instance == null)
         {
-            instance = this;
+            Instance = this;
             DontDestroyOnLoad(gameObject);
         }
         else
         {
-            Destroy(gameObject); // Avoid duplicates
+            Destroy(gameObject);
+            return;
         }
     }
 
     public void PlayMusic()
     {
-        GetComponent<AudioSource>().Play();
+        if (!audioSource.isPlaying)
+        {
+            audioSource.Play();
+        }
     }
 }
