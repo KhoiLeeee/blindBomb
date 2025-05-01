@@ -66,7 +66,7 @@ public class BombController : MonoBehaviour
         position.y = Mathf.Floor(position.y) + 0.5f;
 
         GameObject bomb = Instantiate(bombPrefab, position, Quaternion.identity);
-        //SoundEffects.Instance.PlaySound("Bomb");
+        SoundEffects.Instance.PlaySound("Bomb");
 
         GameManager.AddBombs(agentName, bomb);
 
@@ -84,9 +84,8 @@ public class BombController : MonoBehaviour
         MapManager.Instance.SetCell(cell, CellType.Bomb);
 
         yield return new WaitForSeconds(bombFuseTime);
-        //SoundEffects.Instance.StopSound("Bomb");
+        SoundEffects.Instance.StopSound("Bomb");
 
-        Debug.Log("Bomb explode");
         position = bomb.transform.position;
         position.x = Mathf.Floor(position.x) + 0.5f;
         position.y = Mathf.Floor(position.y) + 0.5f;
@@ -94,7 +93,7 @@ public class BombController : MonoBehaviour
         MapManager.Instance.SetCell(cell, CellType.Empty);
 
         Explosion explosion = Instantiate(explosionPrefab, position, Quaternion.identity);
-        //SoundEffects.Instance.PlaySound("Explosion");
+        SoundEffects.Instance.PlaySound("Explosion");
 
         explosion.SetActiveRenderer(explosion.start);
         explosion.DestroyAfter(explosionDuration);
@@ -103,7 +102,6 @@ public class BombController : MonoBehaviour
         Explode(position, Vector2.down, explosionRadius);
         Explode(position, Vector2.left, explosionRadius);
         Explode(position, Vector2.right, explosionRadius);
-        //SoundEffects.Instance.StopSound("Explosion");
 
         Destroy(bomb);
         GameManager.RemoveBomb(agentName, bomb);

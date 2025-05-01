@@ -23,6 +23,8 @@ public class MusicPlayer : MonoBehaviour
     {
         if (!audioSource.isPlaying)
         {
+
+            audioSource.volume = VolumeManager.GetVolume("music");
             audioSource.Play();
         }
     }
