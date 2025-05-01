@@ -1862,9 +1862,9 @@ MonoBehaviour:
   idleSprite: {fileID: -27150978, guid: b0c86cbe13f1be946b43a58e28195644, type: 3}
   animationSprites:
   - {fileID: -27150978, guid: b0c86cbe13f1be946b43a58e28195644, type: 3}
-  - {fileID: -27150978, guid: b0c86cbe13f1be946b43a58e28195644, type: 3}
-  - {fileID: -27150978, guid: b0c86cbe13f1be946b43a58e28195644, type: 3}
-  - {fileID: -27150978, guid: b0c86cbe13f1be946b43a58e28195644, type: 3}
+  - {fileID: 443280759, guid: b0c86cbe13f1be946b43a58e28195644, type: 3}
+  - {fileID: 552048835, guid: b0c86cbe13f1be946b43a58e28195644, type: 3}
+  - {fileID: -1500982086, guid: b0c86cbe13f1be946b43a58e28195644, type: 3}
   animationTime: 0.2
   loop: 1
   idle: 1
@@ -6145,7 +6145,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: acd0bc49a47044b4a97fa2a38eaed40c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 5
+  speed: 4
   playerID: Player 1
   spriteRendererUp: {fileID: 692019222}
   spriteRendererDown: {fileID: 1248278676}
@@ -10901,7 +10901,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 290, y: -97.464}
+  m_AnchoredPosition: {x: -210, y: -83}
   m_SizeDelta: {x: 321.6578, y: 160.4635}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1651067370
@@ -11396,7 +11396,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -258, y: -97.464}
+  m_AnchoredPosition: {x: 268, y: -83}
   m_SizeDelta: {x: 321.6578, y: 160.4635}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1779196553
@@ -11798,9 +11798,9 @@ MonoBehaviour:
   idleSprite: {fileID: -27150978, guid: b0c86cbe13f1be946b43a58e28195644, type: 3}
   animationSprites:
   - {fileID: -27150978, guid: b0c86cbe13f1be946b43a58e28195644, type: 3}
-  - {fileID: -27150978, guid: b0c86cbe13f1be946b43a58e28195644, type: 3}
-  - {fileID: -27150978, guid: b0c86cbe13f1be946b43a58e28195644, type: 3}
-  - {fileID: -27150978, guid: b0c86cbe13f1be946b43a58e28195644, type: 3}
+  - {fileID: 443280759, guid: b0c86cbe13f1be946b43a58e28195644, type: 3}
+  - {fileID: 552048835, guid: b0c86cbe13f1be946b43a58e28195644, type: 3}
+  - {fileID: -1500982086, guid: b0c86cbe13f1be946b43a58e28195644, type: 3}
   animationTime: 0.2
   loop: 1
   idle: 1

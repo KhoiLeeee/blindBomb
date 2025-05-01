@@ -185,6 +185,18 @@ public class Manager : MonoBehaviour
             playerCells.Add(cell + Vector3Int.left);
             playerCells.Add(cell + Vector3Int.right);
         }
+        Vector3Int enemyCell = destructibleTiles.WorldToCell(enemies[0].transform.position);
+        playerCells.Add(enemyCell);
+        playerCells.Add(enemyCell + Vector3Int.up);
+        playerCells.Add(enemyCell + Vector3Int.down);
+        playerCells.Add(enemyCell + Vector3Int.left);
+        playerCells.Add(enemyCell + Vector3Int.right);
+        enemyCell = destructibleTiles.WorldToCell(enemies[1].transform.position);
+        playerCells.Add(enemyCell);
+        playerCells.Add(enemyCell + Vector3Int.up);
+        playerCells.Add(enemyCell + Vector3Int.down);
+        playerCells.Add(enemyCell + Vector3Int.left);
+        playerCells.Add(enemyCell + Vector3Int.right);
 
         for (int x = xMin; x < xMax; x++)
         {
