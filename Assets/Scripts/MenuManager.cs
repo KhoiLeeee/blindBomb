@@ -62,7 +62,7 @@ public class MenuManager : MonoBehaviour
     private void OnVideoEnd(VideoPlayer vp)
     {
         vp.loopPointReached -= OnVideoEnd;
-        SceneManager.LoadScene("blindBomb");
+        SceneManager.LoadScene("blindBombV1");
     }
 
     public void OnSettingsClicked()

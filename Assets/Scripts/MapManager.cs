@@ -175,10 +175,10 @@ public class MapManager : MonoBehaviour
             explosionMap[x, y] = Mathf.Max(explosionMap[x, y], remainTime);
             for (int i = 1; i <= bombComponent.GetExplosionRadius(); i++)
             {
-                explosionMap[x + i, y] = Mathf.Max(explosionMap[x + i, y], remainTime);
-                explosionMap[x - i, y] = Mathf.Max(explosionMap[x - i, y], remainTime);
-                explosionMap[x, y + i] = Mathf.Max(explosionMap[x, y + i], remainTime);
-                explosionMap[x, y - i] = Mathf.Max(explosionMap[x, y - i], remainTime);
+                if (IsInsideMap(x + i, y)) explosionMap[x + i, y] = Mathf.Max(explosionMap[x + i, y], remainTime);
+                if (IsInsideMap(x - i, y)) explosionMap[x - i, y] = Mathf.Max(explosionMap[x - i, y], remainTime);
+                if (IsInsideMap(x, y + i)) explosionMap[x, y + i] = Mathf.Max(explosionMap[x, y + i], remainTime);
+                if (IsInsideMap(x, y - i)) explosionMap[x, y - i] = Mathf.Max(explosionMap[x, y - i], remainTime);
             }
         }
     }

@@ -40,13 +40,13 @@ public class MovementController : MonoBehaviour
         switch (playerID)
         {
             case "Player 1":
-                keyPair  = KeyBindingRegistry.Player1Keys;
+                keyPair  = KeyBindingRegistry.Instance.Player1Keys;
                 break;
             case "Player 2":
-                keyPair = KeyBindingRegistry.Player2Keys;
+                keyPair = KeyBindingRegistry.Instance.Player2Keys;
                 break;
             default:
-                keyPair = KeyBindingRegistry.Player1Keys;
+                keyPair = KeyBindingRegistry.Instance.Player1Keys;
                 break;
         }
 

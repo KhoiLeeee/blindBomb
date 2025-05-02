@@ -42,10 +42,10 @@ public class BombController : MonoBehaviour
             switch (agentName)
             {
                 case "Player 1":
-                    inputKey = KeyBindingRegistry.Player1Keys["Bomb"];
+                    inputKey = KeyBindingRegistry.Instance.Player1Keys["Bomb"];
                     break;
                 case "Player 2":
-                    inputKey = KeyBindingRegistry.Player2Keys["Bomb"];
+                    inputKey = KeyBindingRegistry.Instance.Player2Keys["Bomb"];
                     break;
             }
         }

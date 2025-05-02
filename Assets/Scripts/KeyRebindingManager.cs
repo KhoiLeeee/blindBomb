@@ -38,8 +38,7 @@ public class KeyRebindingManager : MonoBehaviour
         actionName = _actionName;
         currentKeyText = keyTextLabel;
 
-        HashSet<KeyCode> unavailable = KeyBindingRegistry.GetUnavailableKeys(currentPlayer);
-
+        HashSet<KeyCode> unavailable = KeyBindingRegistry.Instance.GetUnavailableKeys(currentPlayer);
         foreach (var pair in keyButtons)
         {
             KeyCode btnKey = pair.Key;
@@ -71,7 +70,7 @@ public class KeyRebindingManager : MonoBehaviour
 
     public void OnKeySelected(KeyCode selectedKey)
     {
-        KeyBindingRegistry.UpdateKey(currentPlayer, actionName, selectedKey);
+        KeyBindingRegistry.Instance.UpdateKey(currentPlayer, actionName, selectedKey);
         currentKeyText.text = KeyCodeToSymbol(selectedKey);
         popupPanel.SetActive(false);
     }
@@ -114,7 +113,7 @@ public class KeyRebindingManager : MonoBehaviour
             btnRect.sizeDelta = new Vector2(width, height);
         }
     }
-    private string KeyCodeToSymbol(KeyCode key)
+    public string KeyCodeToSymbol(KeyCode key)
     {
         switch (key)
         {

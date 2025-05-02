@@ -67,7 +67,6 @@ public class RuleBasedAgent : MonoBehaviour
         EnqueueWithLimit(coordinateHistory, pos, 20);
 
         string action = ApplyComplexRuleBased();
-        Debug.Log("Action: " + action);
 
         StartCoroutine(PerformActionWithDelay(action));
     }
@@ -388,6 +387,7 @@ public class RuleBasedAgent : MonoBehaviour
         if (bomb_left > 0 && !bombHistory.Contains(self_position) && HasSafeEscape(self_position, bombMap))
             validActions.Add("BOMB");
 
+        Debug.Log(validActions.ToString());
         List<string> actionIdeas = new List<string> { "UP", "DOWN", "LEFT", "RIGHT" };
         Shuffle(actionIdeas);
 
