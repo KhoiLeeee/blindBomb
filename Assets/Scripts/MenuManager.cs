@@ -4,7 +4,6 @@ using System.Collections;
 using UnityEngine.Video;
 using TMPro;
 
-
 public class MenuManager : MonoBehaviour
 {
     public VideoPlayer videoPlayer;

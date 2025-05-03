@@ -1,10 +1,8 @@
-using NUnit.Framework;
-using UnityEngine;
-using System.Collections.Generic;
 using System;
-using Random = UnityEngine.Random;
-using JetBrains.Annotations;
 using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using Random = UnityEngine.Random;
 
 public class RuleBasedAgent : MonoBehaviour
 {

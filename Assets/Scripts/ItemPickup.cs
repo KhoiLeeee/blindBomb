@@ -1,6 +1,3 @@
-using NUnit.Framework;
-using System;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class ItemPickup : MonoBehaviour
@@ -28,7 +25,14 @@ public class ItemPickup : MonoBehaviour
                 break;
 
             case ItemType.SpeedIncrease:
-                player.GetComponent<MovementController>().speed++;
+                if (player.tag == "Player")
+                {
+                    player.GetComponent<MovementController>().speed++;
+                }
+                else
+                {
+                    player.GetComponent<RuleBasedAgent>().speed++;
+                }
                 break;
         }
         SoundEffects.Instance.PlaySound("PickUp");

@@ -1,10 +1,6 @@
-using NUnit.Framework;
-using System;
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using static UnityEditor.PlayerSettings;
 
 [DefaultExecutionOrder(-1)]
 public class GameManager : MonoBehaviour

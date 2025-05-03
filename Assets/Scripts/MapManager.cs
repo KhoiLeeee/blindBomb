@@ -1,8 +1,5 @@
 using System;
 using System.Collections.Generic;
-using Unity.Collections;
-using Unity.Jobs;
-using UnityEditor.Timeline;
 using UnityEngine;
 
 public enum CellType
