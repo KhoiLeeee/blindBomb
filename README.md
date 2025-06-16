@@ -53,7 +53,7 @@ BlindBomB is a 2D desktop game where players compete on a destructible map, plac
 2. **Clone or Download the Project**  
    - Option 1: **Clone using Git**
      ```bash
-     git clone https://github.com/your-username/BlindBomB.git
+     git clone https://github.com/KhoiLeeee/blindBomb.git
      ```
    - Option 2: **Download ZIP**
      - Click the green `Code` button at the top right
